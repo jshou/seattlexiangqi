@@ -12,13 +12,15 @@
     .sidebar
       = image_tag 'images/xiangqi.png', class: 'logo'
       .about
-        Seattle Xiangqi is a group that meets on the second Monday of every month to
-        hang out and play XiangQi (象棋). XiangQi, also known as Chinese chess, is a
-        strategy board game related to the usually more familiar "Western" or
-        "International" chess. Players of all levels are welcome to come.
+        %h3 Seattle Xiangqi
+        %p
+          Seattle Xiangqi meets on the second of Monday each month to hang out
+          and play Xiangqi (象棋), also known as Chinese chess. Come and play,
+          beginners welcome!
 
-        Please feel free to contact us at
-        = link_to 'admin@seattlexiangqi.org', 'mailto:admin@seattlexiangqi.org'
-        if you have any questions!
+        %p
+          Please feel free to contact us at
+          = link_to 'admin@seattlexiangqi.org', 'mailto:admin@seattlexiangqi.org'
+          if you have any questions!
     .main
       = yield
