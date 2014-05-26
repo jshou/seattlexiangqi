@@ -1,0 +1,15 @@
+//= require reset.css
+
+@import 'bourbon'
+@import 'neat'
+
+$grid-columns: 9
+
+body
+  max-width: 960px
+  position: relative
+  margin: 0 auto
+.sidebar
+  @include span-columns(2)
+.main
+  @include span-columns(7)
