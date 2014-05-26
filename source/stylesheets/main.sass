@@ -9,6 +9,7 @@ body
   max-width: 960px
   position: relative
   margin: 0 auto
+  font-family: helvetica, arial, sans-serif
 .sidebar
   @include span-columns(3)
   .logo
@@ -22,3 +23,11 @@ body
       font-weight: bold
 .main
   @include span-columns(9)
+  margin-top: 20px
+  .article-title
+    font-weight: bold
+    font-size: 1.1rem
+  .date
+    font-style: oblique
+  .article-title, .date
+    margin-bottom: 10px
