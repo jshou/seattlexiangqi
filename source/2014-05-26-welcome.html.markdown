@@ -1,7 +1,6 @@
 ---
 title: Welcome!
 date: 2014-05-26 23:11 UTC
-slug: Welcome to the newly refreshed Seattle Xiangqi website!
 tags:
 ---
 Welcome to the newly refreshed Seattle Xiangqi website! We're really excited
