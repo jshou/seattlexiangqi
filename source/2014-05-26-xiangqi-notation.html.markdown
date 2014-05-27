@@ -15,23 +15,23 @@ easily used by Western players here.
 A move in Xiangqi notation is expressed in 4 characters. The first two identify
 the piece to be moved, and the second two specify where the piece moves.
 
-<div id="xiangqi-notation"></div>
+## Identifying the right piece
+
+In most cases, the piece is identified by its _type_ (for example: pawn,
+elephant, cannon), and its _file_, the vertical line that its sitting on. Files
+are numbered from 1 to 9, right to left, from the perspective of the given
+player.
+
+This means that on the diagram below, the chariot (
+
+<div id="xiangqi-notation-1"></div>
 
 <script>
-  var board = new XiangqiViewer.Board('#xiangqi-notation', 50, 2);
-  board.defaultSetup();
-  // board.place
-  // var positionData = [
-  //   {code: 'e', red: false, file: 2, rank: 0},
-  //   {code: 'r', red: true, file: 0, rank: 8},
-  // ];
-  var moves = [
-    {instruction: 'c2=5', red: true, analysis: 'a common opening'},
-    {instruction: 'c8=5', red: false},
-    {instruction: 'h2+3', red: true},
-    {instruction: 'e3+5', red: false},
-    {instruction: 'a6+5', red: true}
-  ];
-
-  board.setMoveList(moves);
+  var board = new XiangqiViewer.Board('#xiangqi-notation-1', 50, 2);
+  board.place([
+    {code: 'e', red: false, file: 2, rank: 0},
+    {code: 'r', red: true, file: 2, rank: 4}
+  ]);
 </script>
+
+## Moving the piece
