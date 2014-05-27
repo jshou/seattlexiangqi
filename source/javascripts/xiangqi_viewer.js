@@ -245,11 +245,11 @@ XiangqiViewer.Board = function(selector, cellSize, strokeWidth) {
     moveList = moves;
   };
 
-  var getInstruction = function(n) {
+  var getMove = function(n) {
     if (n >= 0 && n < moveList.length) {
-      return moveList[n].instruction;
+      return moveList[n];
     } else {
-      return '';
+      return null;
     }
   };
 
@@ -274,9 +274,16 @@ XiangqiViewer.Board = function(selector, cellSize, strokeWidth) {
         matrix[toFile][toRank] = null;
       }
 
-      // put current instruction in return
+      // put current instruction and analysis in return
       this.next--;
-      lastMove.prevInstruction = getInstruction(this.next - 1);
+      var prevMove = getMove(this.next - 1);
+      if (prevMove) {
+        lastMove.prevInstruction = prevMove.instruction;
+        lastMove.analysis = prevMove.analysis || '';
+      } else {
+        lastMove.prevInstruction = '';
+        lastMove.analysis = '';
+      }
 
       // highlight last move
       highlightLastMove();
@@ -288,7 +295,7 @@ XiangqiViewer.Board = function(selector, cellSize, strokeWidth) {
   this.nextMove = function() {
     if (this.next < moveList.length) {
       var move = moveList[this.next];
-      this.runMove(move.instruction, move.red);
+      this.runMove(move.instruction, move.red, move.analysis);
       this.next++;
 
       return move;
@@ -300,7 +307,7 @@ XiangqiViewer.Board = function(selector, cellSize, strokeWidth) {
     renderer.highlightMove(lastMove);
   };
 
-  this.runMove = function(instruction, red) {
+  this.runMove = function(instruction, red, analysis) {
     if (instruction.length != 4) {
       throw "illegal instruction format";
     }
@@ -324,6 +331,7 @@ XiangqiViewer.Board = function(selector, cellSize, strokeWidth) {
       piece: positionedPiece.piece,
       capturedPiece: capturedPiece,
       instruction: instruction,
+      analysis: analysis
     });
 
     // update matrix
@@ -402,16 +410,20 @@ XiangqiViewer.UIRenderer = function(element, board) {
   var prevButton = $('<input type="button" class="xqv-prev-move" value="<-" style="float: left;">');
   var nextButton = $('<input type="button" class="xqv-next-move" value="->" style="float: left;">');
   var currentMove = $('<div class="xqv-current-move" style="float: left; margin-left: 10px;"></div>');
-  var analysis = $('<div class="xqv-analysis" style="clear: both; padding-top: 5px;"></div>');
+  var analysisLabel = $('<div class="xqv-analysis-label" style="clear: both; padding-top: 10px;">Notes:</div>');
+  var analysis = $('<textarea class="xqv-analysis" style="margin-top: 10px; width: 100%; height: 100px;" readonly/>');
   moveViewer.append(prevButton);
   moveViewer.append(nextButton);
   moveViewer.append(currentMove);
+  moveViewer.append(analysisLabel);
   moveViewer.append(analysis);
 
   prevButton.click(function() {
     var move = board.prevMove();
+    analysis.text('');
     if (move) {
       currentMove.text(move.prevInstruction);
+      analysis.text(move.analysis);
     }
   });
 
@@ -419,6 +431,7 @@ XiangqiViewer.UIRenderer = function(element, board) {
     var move = board.nextMove();
     if (move) {
       currentMove.text(move.instruction);
+      analysis.text(move.analysis || '');
     }
   });
 
