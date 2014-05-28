@@ -103,6 +103,28 @@ player is deonted "fc" for "forward cannon", and the piece closer to the player
 is "bc" for "back cannon". So the highlighted cannon on the board is "fc", since
 it is further from the black player's perspective, and the unhighlighted black
 cannon is "bc". Conversely, the highlighted horse is "fh", since it is further
-from red's perspective, and the unlighted horse is "bn".
+from red's perspective, and the unhighlighted horse is "bn".
 
 ## Moving the piece
+
+Where to move a piece is specified by the third and fourth characters in each
+move's notation. The third character specifies the _direction_ in which the
+piece moves, and the fourth character specifies its _destination_. Xiangqi
+pieces can be categorized into those that move orthogonally (either horizontally
+or vertically), and those that don't. We'll go through the orthogonal movers
+first.
+
+### Orthogonal movers
+When the direction for an orthogonally moving piece is + or -, the piece moves
+forward or backward (according to the player's perspective) _n_ number of steps,
+where _n_ is the destination. When the direction for an  orthogonally moving
+piece is =, the destination number specifies the _file_ the piece is to end up
+on. Step through the following diagram for a couple examples.
+
+<div id="xiangqi-notation-2"></div>
+<script>
+  var board = new XiangqiViewer.Board('#xiangqi-notation-2', 50, 2, true);
+  board.defaultSetup();
+</script>
+
+### Diagonal movers
