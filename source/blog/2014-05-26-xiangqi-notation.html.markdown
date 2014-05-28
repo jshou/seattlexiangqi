@@ -88,13 +88,21 @@ black's perspective.
     {code: 'e', red: false, file: 2, rank: 0},
     {code: 'r', red: true, file: 2, rank: 4},
     {code: 'c', red: false, file: 7, rank: 7},
-    {code: 'c', red: false, file: 7, rank: 4}
+    {code: 'c', red: false, file: 7, rank: 4},
+    {code: 'h', red: true, file: 5, rank: 5},
+    {code: 'h', red: true, file: 5, rank: 3}
   ]);
+
+  board.highlight({file: 7, rank: 7});
+  board.highlight({file: 5, rank: 3});
 </script>
 
 Occasionally, there will be two pieces of the same type on the same file, like
 the two cannons in the above diagram. In these cases, the piece further from the
 player is deonted "fc" for "forward cannon", and the piece closer to the player
-is "bc" for "back cannon".
+is "bc" for "back cannon". So the highlighted cannon on the board is "fc", since
+it is further from the black player's perspective, and the unhighlighted black
+cannon is "bc". Conversely, the highlighted horse is "fh", since it is further
+from red's perspective, and the unlighted horse is "bn".
 
 ## Moving the piece
