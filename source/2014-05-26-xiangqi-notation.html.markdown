@@ -27,7 +27,7 @@ This means that on the diagram below, the chariot (
 <div id="xiangqi-notation-1"></div>
 
 <script>
-  var board = new XiangqiViewer.Board('#xiangqi-notation-1', 50, 2);
+  var board = new XiangqiViewer.Board('#xiangqi-notation-1', 50, 2, false);
   board.place([
     {code: 'e', red: false, file: 2, rank: 0},
     {code: 'r', red: true, file: 2, rank: 4}
