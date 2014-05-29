@@ -1,7 +1,7 @@
 ---
 title: Xiangqi Notation
 date: 2014-05-26 23:53 UTC
-tags:
+tags: intro, notation
 ---
 
 When learning Xiangqi, it is often quite useful to be able to notate games. In
