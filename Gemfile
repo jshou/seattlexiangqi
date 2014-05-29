@@ -10,3 +10,4 @@ gem "builder", "~> 3.0"
 
 gem 'middleman-neat'
 gem 'nokogiri'
+gem 'middleman-google-analytics'

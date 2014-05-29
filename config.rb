@@ -103,3 +103,7 @@ configure :build do
 end
 
 activate :neat
+
+activate :google_analytics do |ga|
+  ga.tracking_id = 'UA-30674736-4'
+end
