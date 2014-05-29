@@ -1,7 +1,7 @@
 var XiangqiViewer = {}
 window.XiangqiViewer = XiangqiViewer;
 
-XiangqiViewer.BoardRenderer = function(element, cellSize, strokeWidth) {
+XiangqiViewer.BoardRenderer = function(selector, cellSize, strokeWidth) {
   var BOARD_WIDTH = 8;
   var BOARD_HEIGHT = 9;
   var BOARD_COLOR = 'rgb(6, 120, 155)';
@@ -21,7 +21,8 @@ XiangqiViewer.BoardRenderer = function(element, cellSize, strokeWidth) {
   var riverBot = Math.ceil(BOARD_HEIGHT/2) * cellSize + MARGIN;
   var dotDistance = 2 * strokeWidth;
 
-  var root = SVG('xiangqi-example').width(width).height(height);
+  $(selector).append('<svg width=' + width + ' height=' + height + '/>');
+  var root = Snap(selector + ' svg');
   var highlighted = [];
 
   this.draw = function() {
@@ -46,9 +47,9 @@ XiangqiViewer.BoardRenderer = function(element, cellSize, strokeWidth) {
   };
 
   var drawBoardLine = function(x1, y1, x2, y2) {
-    root.line(x1, y1, x2, y2).stroke({
-      color: BOARD_COLOR,
-      width: strokeWidth
+    root.line(x1, y1, x2, y2).attr({
+      stroke: BOARD_COLOR,
+      strokeWidth: strokeWidth
     });
   };
 
@@ -83,15 +84,13 @@ XiangqiViewer.BoardRenderer = function(element, cellSize, strokeWidth) {
   // x and y are from 0 to (n - 1)
   var drawDots = function(x, y, isRight) {
     var directionMultipler = isRight ? -1 : 1;
-    root.rect(strokeWidth, strokeWidth).move(
-      MARGIN + x * cellSize - dotDistance * directionMultipler - (strokeWidth / 2),
-      MARGIN + y * cellSize - dotDistance - (strokeWidth / 2)
-    ).attr({fill: BOARD_COLOR});
+    var x1 = MARGIN + x * cellSize - dotDistance * directionMultipler - (strokeWidth / 2);
+    var y1 = MARGIN + y * cellSize - dotDistance - (strokeWidth / 2);
+    root.rect(x1, y1, strokeWidth, strokeWidth).attr({fill: BOARD_COLOR});
 
-    root.rect(strokeWidth, strokeWidth).move(
-      MARGIN + x * cellSize - dotDistance * directionMultipler - (strokeWidth / 2),
-      MARGIN + y * cellSize + dotDistance - (strokeWidth / 2)
-    ).attr({fill: BOARD_COLOR});
+    var x2 = MARGIN + x * cellSize - dotDistance * directionMultipler - (strokeWidth / 2);
+    var y2 = MARGIN + y * cellSize + dotDistance - (strokeWidth / 2);
+    root.rect(x2, y2, strokeWidth, strokeWidth).attr({fill: BOARD_COLOR});
   };
 
   var getX = function(file) {
@@ -103,29 +102,23 @@ XiangqiViewer.BoardRenderer = function(element, cellSize, strokeWidth) {
   };
 
   this.putPiece = function(file, rank, piece) {
-    return root.image(piece.spriteUrl())
-      .move(getX(file), getY(rank))
-      .attr({
-        width: PIECE_SIZE,
-        height: PIECE_SIZE
-      });
+    return root.image(piece.spriteUrl(), getX(file), getY(rank), PIECE_SIZE, PIECE_SIZE);
   }
 
   this.movePiece = function(file, rank, piece) {
-    piece.rendered.move(getX(file), getY(rank));
+    piece.rendered.attr({x: getX(file), y: getY(rank)});
   };
 
-  var highlight = function(position) {
-    var x = getX(position.file) - (PIECE_SIZE * 0.2 / 2);
-    var y = getY(position.rank) - (PIECE_SIZE * 0.2 / 2);
+  this.highlight = function(position) {
+    var x = getX(position.file) + (PIECE_SIZE / 2);
+    var y = getY(position.rank) + (PIECE_SIZE / 2);
 
-    return root.circle(PIECE_SIZE * 1.2)
-      .move(x, y)
-      .fill('none')
-      .stroke({
-        width: strokeWidth,
-        color: HIGHLIGHT_COLOR
-      });
+    highlighted.push(root.circle(x, y, PIECE_SIZE * 1.2 / 2)
+      .attr({
+        fill: 'none',
+        stroke: HIGHLIGHT_COLOR,
+        strokeWidth: strokeWidth,
+      }));
   };
 
   this.highlightMove = function(move) {
@@ -136,21 +129,22 @@ XiangqiViewer.BoardRenderer = function(element, cellSize, strokeWidth) {
 
     if (move) {
       // draw new ones
-      var from = highlight(move.from);
-      var to = highlight(move.to);
-      highlighted.push(from);
-      highlighted.push(to);
+      this.highlight(move.from);
+      this.highlight(move.to);
     }
   };
 
   return this;
 };
 
-XiangqiViewer.Board = function(element, cellSize, strokeWidth) {
-  var renderer = new XiangqiViewer.BoardRenderer(element, cellSize, strokeWidth);
+XiangqiViewer.Board = function(selector, cellSize, strokeWidth, ui) {
+  var element = $(selector);
+  var renderer = new XiangqiViewer.BoardRenderer(selector, cellSize, strokeWidth);
   renderer.draw();
 
-  var uiRenderer = new XiangqiViewer.UIRenderer(element, this);
+  if (ui) {
+    new XiangqiViewer.UIRenderer(element, this);
+  }
 
   var WIDTH = 9
   var HEIGHT = 10
@@ -175,6 +169,8 @@ XiangqiViewer.Board = function(element, cellSize, strokeWidth) {
   var get = function(file, rank) {
     return matrix[file][rank];
   };
+
+  this.highlight = renderer.highlight;
 
   var place = function(file, rank, piece) {
     validatePosition({file: file, rank: rank});
@@ -251,11 +247,11 @@ XiangqiViewer.Board = function(element, cellSize, strokeWidth) {
     moveList = moves;
   };
 
-  var getInstruction = function(n) {
+  var getMove = function(n) {
     if (n >= 0 && n < moveList.length) {
-      return moveList[n].instruction;
+      return moveList[n];
     } else {
-      return '';
+      return null;
     }
   };
 
@@ -280,9 +276,16 @@ XiangqiViewer.Board = function(element, cellSize, strokeWidth) {
         matrix[toFile][toRank] = null;
       }
 
-      // put current instruction in return
+      // put current instruction and analysis in return
       this.next--;
-      lastMove.prevInstruction = getInstruction(this.next - 1);
+      var prevMove = getMove(this.next - 1);
+      if (prevMove) {
+        lastMove.prevInstruction = prevMove.instruction;
+        lastMove.analysis = prevMove.analysis || '';
+      } else {
+        lastMove.prevInstruction = '';
+        lastMove.analysis = '';
+      }
 
       // highlight last move
       highlightLastMove();
@@ -294,7 +297,7 @@ XiangqiViewer.Board = function(element, cellSize, strokeWidth) {
   this.nextMove = function() {
     if (this.next < moveList.length) {
       var move = moveList[this.next];
-      this.runMove(move.instruction, move.red);
+      this.runMove(move.instruction, move.red, move.analysis);
       this.next++;
 
       return move;
@@ -306,7 +309,7 @@ XiangqiViewer.Board = function(element, cellSize, strokeWidth) {
     renderer.highlightMove(lastMove);
   };
 
-  this.runMove = function(instruction, red) {
+  this.runMove = function(instruction, red, analysis) {
     if (instruction.length != 4) {
       throw "illegal instruction format";
     }
@@ -330,6 +333,7 @@ XiangqiViewer.Board = function(element, cellSize, strokeWidth) {
       piece: positionedPiece.piece,
       capturedPiece: capturedPiece,
       instruction: instruction,
+      analysis: analysis
     });
 
     // update matrix
@@ -408,16 +412,20 @@ XiangqiViewer.UIRenderer = function(element, board) {
   var prevButton = $('<input type="button" class="xqv-prev-move" value="<-" style="float: left;">');
   var nextButton = $('<input type="button" class="xqv-next-move" value="->" style="float: left;">');
   var currentMove = $('<div class="xqv-current-move" style="float: left; margin-left: 10px;"></div>');
-  var analysis = $('<div class="xqv-analysis" style="clear: both; padding-top: 5px;"></div>');
+  var analysisLabel = $('<div class="xqv-analysis-label" style="clear: both; padding-top: 10px;">Notes:</div>');
+  var analysis = $('<textarea class="xqv-analysis" style="margin-top: 10px; width: 100%; height: 100px;" readonly/>');
   moveViewer.append(prevButton);
   moveViewer.append(nextButton);
   moveViewer.append(currentMove);
+  moveViewer.append(analysisLabel);
   moveViewer.append(analysis);
 
   prevButton.click(function() {
     var move = board.prevMove();
+    analysis.text('');
     if (move) {
       currentMove.text(move.prevInstruction);
+      analysis.text(move.analysis);
     }
   });
 
@@ -425,6 +433,7 @@ XiangqiViewer.UIRenderer = function(element, board) {
     var move = board.nextMove();
     if (move) {
       currentMove.text(move.instruction);
+      analysis.text(move.analysis || '');
     }
   });
 
@@ -492,9 +501,9 @@ XiangqiViewer.Chariot = function(red) {
   me.red = red;
   me.spriteUrl = function() {
     if (red) {
-      return "images/xiangqi_viewer/chariot_red.svg";
+      return "/images/xiangqi_viewer/chariot_red.svg";
     } else {
-      return "images/xiangqi_viewer/chariot_black.svg";
+      return "/images/xiangqi_viewer/chariot_black.svg";
     }
   };
 
@@ -507,9 +516,9 @@ XiangqiViewer.Horse = function(red) {
   me.red = red;
   me.spriteUrl = function() {
     if (red) {
-      return "images/xiangqi_viewer/horse_red.svg";
+      return "/images/xiangqi_viewer/horse_red.svg";
     } else {
-      return "images/xiangqi_viewer/horse_black.svg";
+      return "/images/xiangqi_viewer/horse_black.svg";
     }
   };
 
@@ -542,9 +551,9 @@ XiangqiViewer.Elephant = function(red) {
   me.distance = 2;
   me.spriteUrl = function() {
     if (red) {
-      return "images/xiangqi_viewer/elephant_red.svg";
+      return "/images/xiangqi_viewer/elephant_red.svg";
     } else {
-      return "images/xiangqi_viewer/elephant_black.svg";
+      return "/images/xiangqi_viewer/elephant_black.svg";
     }
   };
 
@@ -558,9 +567,9 @@ XiangqiViewer.Advisor = function(red) {
   me.distance = 1;
   me.spriteUrl = function() {
     if (red) {
-      return "images/xiangqi_viewer/adviser_red.svg";
+      return "/images/xiangqi_viewer/adviser_red.svg";
     } else {
-      return "images/xiangqi_viewer/adviser_black.svg";
+      return "/images/xiangqi_viewer/adviser_black.svg";
     }
   };
 
@@ -573,9 +582,9 @@ XiangqiViewer.General = function(red) {
   me.red = red;
   me.spriteUrl = function() {
     if (red) {
-      return "images/xiangqi_viewer/general_red.svg";
+      return "/images/xiangqi_viewer/general_red.svg";
     } else {
-      return "images/xiangqi_viewer/general_black.svg";
+      return "/images/xiangqi_viewer/general_black.svg";
     }
   };
 
@@ -588,9 +597,9 @@ XiangqiViewer.Pawn = function(red) {
   me.red = red;
   me.spriteUrl = function() {
     if (red) {
-      return "images/xiangqi_viewer/pawn_red.svg";
+      return "/images/xiangqi_viewer/pawn_red.svg";
     } else {
-      return "images/xiangqi_viewer/pawn_black.svg";
+      return "/images/xiangqi_viewer/pawn_black.svg";
     }
   };
 
@@ -603,9 +612,9 @@ XiangqiViewer.Cannon = function(red) {
   me.red = red;
   me.spriteUrl = function() {
     if (red) {
-      return "images/xiangqi_viewer/cannon_red.svg";
+      return "/images/xiangqi_viewer/cannon_red.svg";
     } else {
-      return "images/xiangqi_viewer/cannon_black.svg";
+      return "/images/xiangqi_viewer/cannon_black.svg";
     }
   };
 

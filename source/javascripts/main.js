@@ -1,3 +1,3 @@
+//= require snap.svg-min.js
 //= require jquery.js
-//= require svg.min.js
 //= require xiangqi_viewer.js
