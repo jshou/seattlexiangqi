@@ -115,6 +115,7 @@ or vertically), and those that don't. We'll go through the orthogonal movers
 first.
 
 ### Orthogonal movers
+Pawns, cannons, chariots and generals move orthogonally.
 When the direction for an orthogonally moving piece is + or -, the piece moves
 forward or backward (according to the player's perspective) _n_ number of steps,
 where _n_ is the destination. When the direction for an  orthogonally moving
@@ -125,6 +126,30 @@ on. Step through the following diagram for a couple examples.
 <script>
   var board = new XiangqiViewer.Board('#xiangqi-notation-2', 50, 2, true);
   board.defaultSetup();
+
+  board.setMoveList([
+    {instruction: 'r9+2', red: true, analysis: 'The red chariot on file 9 moves forward two spaces.'},
+    {instruction: 'c8-1', red: false, analysis: 'The black cannon on file 8 moves back one space.'},
+    {instruction: 'c8=5', red: true, analysis: 'The red cannon on file 8 moves horizontally to file 5.'}
+  ]);
 </script>
 
-### Diagonal movers
+### Non-orthogonal movers
+
+Pieces such as the horse, elephant and adviser do not move orthogonally, and
+therefore never have a move specified with =; all their moves are + or -. For
+these pieces, the _destination_ is always the _file_ the piece ends up on. Step
+through the following diagram for a couple examples of non-orthogonal pieces.
+
+<div id="xiangqi-notation-3"></div>
+<script>
+  var board = new XiangqiViewer.Board('#xiangqi-notation-3', 50, 2, true);
+  board.defaultSetup();
+
+  board.setMoveList([
+    {instruction: 'h8+7', red: true, analysis: 'The red horse on file 8 moves forward to file 7.'},
+    {instruction: 'e7+5', red: false, analysis: 'The black elephant on file 7 moves forward to file 5.'},
+    {instruction: 'a6+5', red: true, analysis: 'The red adviser on file 6 moves forward to file 5.'},
+    {instruction: 'e5-7', red: false, analysis: 'The black elephant on file 5 moves back to file 7.'}
+  ]);
+</script>
