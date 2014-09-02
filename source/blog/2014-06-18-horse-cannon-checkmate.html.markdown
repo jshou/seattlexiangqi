@@ -48,7 +48,7 @@ through the moves to see the checkmate in action.
 
   board.setMoveList([
     {instruction: 'h6+7', red: true, analysis: "Red's horse places black in check."},
-    {instruction: 'g5+1', red: false, analysis: 'Black has only one legal move.'},
+    {instruction: 'k5+1', red: false, analysis: 'Black has only one legal move.'},
     {instruction: 'c8+4', red: true, analysis: 'Red completes the horse-cannon checkmate.'},
   ]);
 </script>
