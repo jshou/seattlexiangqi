@@ -179,18 +179,18 @@ XiangqiViewer.Board = function(selector, cellSize, strokeWidth, ui) {
     piece.rendered = renderer.putPiece(file, rank, piece);
   };
 
-  var searchForward = function(pieceCode, red) {
+  var searchBackward = function(pieceCode, red) {
     for (var i = 0; i < WIDTH; i++) {
       for (var j = 0; j < HEIGHT; j++) {
         var piece = get(i, j);
-        if (piece && piece.code == pieceCode) {
+        if (piece && piece.code == pieceCode && piece.red == red) {
           return {piece: piece, position: {file: i, rank: j}};
         }
       }
     }
   };
 
-  var searchBackward = function(pieceCode, red) {
+  var searchForward = function(pieceCode, red) {
     for (var i = 0; i < WIDTH; i++) {
       for (var j = HEIGHT - 1; j >= 0; j--) {
         var piece = get(i, j);
@@ -203,13 +203,13 @@ XiangqiViewer.Board = function(selector, cellSize, strokeWidth, ui) {
 
   var getPositionedPiece = function(instruction, red) {
     if (instruction[1] == '+' && red) {
-      return searchBackward(instruction[1], red);
+      return searchBackward(instruction[0], red);
     } else if (instruction[1] == '-' && red) {
-      return searchForward(instruction[1], red);
+      return searchForward(instruction[0], red);
     } else if (instruction[1] == '+' && !red) {
-      return searchBackward(instruction[1], red);
+      return searchBackward(instruction[0], red);
     } else if (instruction[1] == '-' && !red) {
-      return searchForward(instruction[1], red);
+      return searchForward(instruction[0], red);
     } else {
       var instructionPiece = instruction[0];
       var file;
