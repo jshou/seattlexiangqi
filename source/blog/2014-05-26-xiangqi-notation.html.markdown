@@ -119,7 +119,7 @@ Pawns, cannons, chariots and generals move orthogonally.
 When the direction for an orthogonally moving piece is + or -, the piece moves
 forward or backward (according to the player's perspective) _n_ number of steps,
 where _n_ is the destination. When the direction for an  orthogonally moving
-piece is =, the destination number specifies the _file_ the piece is to end up
+piece is ., the destination number specifies the _file_ the piece is to end up
 on. Step through the following diagram for a couple examples.
 
 <div id="xiangqi-notation-2"></div>
@@ -130,14 +130,14 @@ on. Step through the following diagram for a couple examples.
   board.setMoveList([
     {instruction: 'r9+2', red: true, analysis: 'The red chariot on file 9 moves forward two spaces.'},
     {instruction: 'c8-1', red: false, analysis: 'The black cannon on file 8 moves back one space.'},
-    {instruction: 'c8=5', red: true, analysis: 'The red cannon on file 8 moves horizontally to file 5.'}
+    {instruction: 'c8.5', red: true, analysis: 'The red cannon on file 8 moves horizontally to file 5.'}
   ]);
 </script>
 
 ### Non-orthogonal movers
 
 Pieces such as the horse, elephant and adviser do not move orthogonally, and
-therefore never have a move specified with =; all their moves are + or -. For
+therefore never have a move specified with .; all their moves are + or -. For
 these pieces, the _destination_ is always the _file_ the piece ends up on. Step
 through the following diagram for a couple examples of non-orthogonal pieces.
 
