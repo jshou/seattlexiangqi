@@ -99,11 +99,11 @@ black's perspective.
 
 Occasionally, there will be two pieces of the same type on the same file, like
 the two cannons in the above diagram. In these cases, the piece further from the
-player is deonted "fc" for "forward cannon", and the piece closer to the player
-is "bc" for "back cannon". So the highlighted cannon on the board is "fc", since
+player is denoted "c+", and the piece closer to the player
+is "c-" for "back cannon". So the highlighted cannon on the board is "c+", since
 it is further from the black player's perspective, and the unhighlighted black
-cannon is "bc". Conversely, the highlighted horse is "fh", since it is further
-from red's perspective, and the unhighlighted horse is "bn".
+cannon is "c-". Conversely, the highlighted horse is "h+", since it is further
+from red's perspective, and the unhighlighted horse is "h-".
 
 ## Moving the piece
 
