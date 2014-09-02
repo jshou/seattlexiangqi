@@ -3,6 +3,7 @@ title: Xiangqi Notation
 date: 2014-05-26 23:53 UTC
 tags: intro, notation
 ---
+_Edit: Updated Sept 1, 2014 to match [WXF notation](http://www.wxf.org/xq/computer/wxf_notation.html)._
 
 When learning Xiangqi, it is often quite useful to be able to notate games. In
 addition to being able to take notes and analyze past games, there are many
