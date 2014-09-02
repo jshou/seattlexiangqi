@@ -19,14 +19,14 @@ general.
 <script>
   var board = new XiangqiViewer.Board('#double-cannon-1', 50, 2, false);
   board.place([
-    {code: 'g', red: false, file: 4, rank: 0},
+    {code: 'k', red: false, file: 4, rank: 0},
     {code: 'a', red: false, file: 5, rank: 0},
     {code: 'a', red: false, file: 3, rank: 0},
     {code: 'e', red: false, file: 6, rank: 0},
     {code: 'e', red: false, file: 2, rank: 0},
     {code: 'c', red: true, file: 4, rank: 4},
     {code: 'c', red: true, file: 4, rank: 5},
-    {code: 'g', red: true, file: 4, rank: 9},
+    {code: 'k', red: true, file: 4, rank: 9},
   ]);
 
   board.highlight({file: 4, rank: 5});

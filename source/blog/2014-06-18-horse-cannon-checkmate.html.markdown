@@ -16,10 +16,10 @@ exits from the cannon's check, which are controlled by red's horse.
 <script>
   var board = new XiangqiViewer.Board('#horse-cannon-checkmate-1', 50, 2, false);
   board.place([
-    {code: 'g', red: true, file: 4, rank: 9},
+    {code: 'k', red: true, file: 4, rank: 9},
     {code: 'e', red: true, file: 4, rank: 7},
     {code: 'e', red: true, file: 2, rank: 9},
-    {code: 'g', red: false, file: 4, rank: 1},
+    {code: 'k', red: false, file: 4, rank: 1},
     {code: 'c', red: true, file: 1, rank: 1},
     {code: 'h', red: true, file: 2, rank: 1},
   ]);
@@ -36,10 +36,10 @@ through the moves to see the checkmate in action.
 <script>
   var board = new XiangqiViewer.Board('#horse-cannon-checkmate-2', 50, 2, true);
   board.place([
-    {code: 'g', red: true, file: 4, rank: 9},
+    {code: 'k', red: true, file: 4, rank: 9},
     {code: 'e', red: true, file: 4, rank: 7},
     {code: 'e', red: true, file: 2, rank: 9},
-    {code: 'g', red: false, file: 4, rank: 0},
+    {code: 'k', red: false, file: 4, rank: 0},
     {code: 'a', red: false, file: 3, rank: 0},
     {code: 'a', red: false, file: 5, rank: 0},
     {code: 'c', red: true, file: 1, rank: 5},

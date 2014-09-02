@@ -55,7 +55,7 @@ slightly different systems in use, but I will be using the following:
     <td>士</td>
   </tr>
   <tr>
-    <td>g</td>
+    <td>k</td>
     <td>General</td>
     <td>帥</td>
     <td>將</td>
