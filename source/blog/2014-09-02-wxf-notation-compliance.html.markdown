@@ -18,3 +18,5 @@ the WXF. Here are the changes I've made:
 
 I've retroactively updated the [notation post](/blog/2014/05/26/xiangqi-notation.html)
 to reflect these changes. Please read there for more detailed examples.
+
+_Thanks to [Sebastian Pipping](http://blog.hartwork.org/) for bringing this to my attention!_
