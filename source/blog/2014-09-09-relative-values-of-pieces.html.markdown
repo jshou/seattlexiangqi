@@ -36,7 +36,7 @@ should remain the same.
   <tr>
     <td>炮</td>
     <td>砲</td>
-    <td>2</td>
+    <td>4</td>
   </tr>
   <tr>
     <td>相</td>
